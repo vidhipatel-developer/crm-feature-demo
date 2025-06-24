@@ -13,7 +13,7 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         $query = Contact::active();
-        
+
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -21,21 +21,21 @@ class ContactController extends Controller
                   ->orWhere('email', 'like', "%{$search}%");
             });
         }
-        
+
         if ($request->filled('gender') && $request->gender !== 'All Genders') {
             $query->where('gender', $request->gender);
         }
-        
+
         $contacts = $query->orderBy('name')->get();
         $customFields = CustomField::all();
-        
+
         if ($request->ajax()) {
             return response()->json([
                 'contacts' => $contacts,
                 'customFields' => $customFields
             ]);
         }
-        
+
         return view('contacts.index', compact('contacts', 'customFields'));
     }
 
@@ -114,7 +114,7 @@ class ContactController extends Controller
         return DB::transaction(function () use ($request) {
             $targetContact = Contact::findOrFail($request->target_id);
             $sourceContacts = Contact::whereIn('id', $request->source_ids)->get();
-            
+
             foreach ($sourceContacts as $sourceContact) {
                 // Create merge history record
                 MergeHistory::create([

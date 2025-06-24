@@ -1,66 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# VIDHI PATEL
+# Project Setup Guide (CRM Feature)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This document provides a step-by-step guide to get the project up and running on your local machine. Follow these
+instructions carefully to ensure a smooth setup.
 
-## About Laravel
+## Prerequisites
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Before you begin, ensure you have the following software installed on your system:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP: Version 8.2 or higher (check your composer.json for specific requirements).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Composer: A dependency manager for PHP.
 
-## Learning Laravel
+- MySQL: A relational database management system.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Installation Steps
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Follow these steps in the given order to set up your project:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### 1. Install Project Dependencies
 
-## Laravel Sponsors
+First, navigate to your project's root directory in your terminal and install all PHP dependencies using Composer:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```
+composer install
+```
 
-### Premium Partners
+#### 2. Database Setup (MySQL)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+You need to create a new MySQL database for this project.
 
-## Contributing
+Open your MySQL client (e.g., phpMyAdmin, MySQL Workbench, or a terminal client).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Execute the following SQL command to create a new database. Replace your_database_name with your desired database name:
 
-## Code of Conduct
+```
+CREATE DATABASE your_database_name;
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### 3. Setup Environment File
 
-## Security Vulnerabilities
+Laravel uses an .env file to manage environment-specific configurations (like database credentials, API keys, etc.).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Copy the example environment file and rename it to .env:
 
-## License
+```
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open the newly created .env file in a text editor.
+
+#### 4. Configure Database Connection in .env
+
+In your .env file, locate the database section and update the following variables with your MySQL credentials and the
+database name you created in Step 2:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name  # <-- Enter the name of your database here
+DB_USERNAME=your_mysql_username # <-- Enter your MySQL username
+DB_PASSWORD=your_mysql_password # <-- Enter your MySQL password
+```
+
+#### 5. Generate Application Key
+
+Laravel requires an application key for security purposes. This key is used for session encryption and other sensitive
+data.
+
+Run the following Artisan command to generate the key:
+
+```
+php artisan key:generate
+```
+
+This command will automatically update your .env file with a new APP_KEY.
+
+#### 6. Set Up Proper APP_URL
+
+In your .env file, ensure APP_URL is correctly set. For local development, this is typically http://localhost
+or http://127.0.0.1. If you are serving the project from a subdirectory, include it.
+
+```
+APP_URL=http://localhost:8000 # Or your custom local URL, e.g., http://127.0.0.1:8000
+```
+
+Note: If you plan to use php artisan serve, the default port is 8000, so http://localhost:8000 is often appropriate.
+
+### 7. Run Database Migrations
+
+Once your database connection is configured, run the migrations to create the necessary tables in your database:
+
+```
+php artisan migrate
+```
+
+#### 8. Seed the Database (Optional, but recommended)
+
+If your project includes seeders to populate the database with dummy data (e.g., for initial testing or demonstration),
+run them:
+
+```
+php artisan db:seed
+```
+
+#### 9. Start the Development Server
+
+Finally, to run your Laravel application, start the built-in development server:
+
+```
+php artisan serve
+```
+
+This command will typically make your application accessible at `http://127.0.0.1:8000` (or `http://localhost:8000`).
+You can open this URL in your web browser.
+
+You should now have the project fully set up and running on your local environment. If you encounter any issues,
+double-check each step and consult the Laravel documentation or project-specific instructions if available.
